@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تقرير النشاط الطلابي</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
     <style>
+        /* All necessary CSS is now included here */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
         body {
@@ -73,6 +80,13 @@
 
         .tab-content.active {
             display: block;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         table {
@@ -143,6 +157,7 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 15px;
+            justify-content: center;
         }
 
         .preview-image-container {
@@ -259,8 +274,7 @@
         </div>
 
         <div id="tab1" class="tab-content active">
-            <h2>مجال المواطنة و الحياة</h2>
-            <table>
+             <table>
                 <tr>
                     <td>اسم المدرسة</td>
                     <td><input type="text" id="school-name-1"></td>
@@ -277,7 +291,7 @@
                     <td>اليوم</td>
                     <td><input type="text" id="day-1"></td>
                     <td>التاريخ</td>
-                    <td><input type="date" id="date-1"></td>
+                    <td><input type="text" id="date-1" class="flatpickr-input"></td>
                 </tr>
                 <tr>
                     <td>اسم البرنامج المنفذ</td>
@@ -304,6 +318,14 @@
             </table>
         </div>
 
+        <div id="tab2" class="tab-content"> <h2>مجال الثقافة و الفنون</h2> </div>
+        <div id="tab3" class="tab-content"> <h2>مجال العلوم و التقنية</h2> </div>
+        <div id="tab4" class="tab-content"> <h2>مجال الريادة و الصحة</h2> </div>
+        <div id="tab5" class="tab-content"> <h2>مجال القيم و المناسبات</h2> </div>
+        <div id="tab6" class="tab-content"> <h2>مجال النشاط الكشفي</h2> </div>
+        <div id="tab7" class="tab-content"> <h2>التقرير الاسبوعي للأنشطة</h2> </div>
+        <div id="tab8" class="tab-content"> <h2>التقرير الختامي للأنشطة</h2> </div>
+
         <h2>الشواهد (الصور)</h2>
         <div class="file-upload-container" onclick="document.getElementById('file-input').click()">
             <p>انقر هنا لرفع الصور</p>
@@ -327,17 +349,25 @@
     </div>
 
     <script>
+        // All necessary JavaScript is now included here
         document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#date-1", {
+                locale: "ar",
+                dateFormat: "d-m-Y"
+            });
+
             const tabs = document.querySelectorAll('.tab-button');
             const contents = document.querySelectorAll('.tab-content');
+            let activeTabContent = document.querySelector('.tab-content.active');
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     tabs.forEach(item => item.classList.remove('active'));
                     contents.forEach(content => content.classList.remove('active'));
-
                     tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab).classList.add('active');
+                    const newActiveTab = document.getElementById(tab.dataset.tab);
+                    newActiveTab.classList.add('active');
+                    activeTabContent = newActiveTab;
                 });
             });
 
@@ -345,25 +375,23 @@
             const imagePreview = document.getElementById('image-preview');
 
             fileInput.addEventListener('change', function () {
+                imagePreview.innerHTML = '';
                 for (const file of this.files) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         const container = document.createElement('div');
                         container.className = 'preview-image-container';
-
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.className = 'preview-image';
                         container.appendChild(img);
-
                         const deleteBtn = document.createElement('button');
                         deleteBtn.innerHTML = '&times;';
                         deleteBtn.className = 'delete-btn';
                         deleteBtn.onclick = function() {
-                            container.remove();
+                           container.remove();
                         };
                         container.appendChild(deleteBtn);
-
                         imagePreview.appendChild(container);
                     }
                     reader.readAsDataURL(file);
@@ -371,7 +399,21 @@
             });
 
             document.getElementById('print-button').addEventListener('click', function () {
-                window.print();
+                const reportContainer = document.getElementById('report-container');
+                const originalTitle = document.title;
+                const programNameInput = activeTabContent.querySelector('input[id^="program-name"]');
+                if (programNameInput && programNameInput.value) {
+                    document.title = programNameInput.value;
+                }
+                html2pdf().from(reportContainer).set({
+                    margin: 10,
+                    filename: document.title + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).save().then(() => {
+                    document.title = originalTitle;
+                });
             });
             
             document.getElementById('clear-button').addEventListener('click', function () {
