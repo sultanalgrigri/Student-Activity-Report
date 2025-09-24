@@ -1,434 +1,50 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تقرير النشاط الطلابي</title>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقرير النشاط الطلابي</title>
 
-    <style>
-        /* All necessary CSS is now included here */
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./نظام التقارير_files/css2" rel="stylesheet">
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            direction: rtl;
-            background-color: #eef2f7;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
+  <link rel="manifest" href="https://defullah2010-svg.github.io/P1/manifest.json">
+  <meta name="theme-color" content="#f0f2f5">
+  <link rel="apple-touch-icon" href="httpsa://a.top4top.io/p_3530c738a1.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="نظام التقارير">
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid #ddd;
-        }
+  <style>
+    :root {
+      --background-color: #f0f2f5;
+      --text-color: #1a202c;
+      --primary-accent: #2b6cb0;
+      --font-family: 'Cairo', sans-serif;
+    }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 24px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden; /* Prevents scrolling on the main page */
+    }
 
-        .tab-button {
-            flex-grow: 1;
-            padding: 12px 10px;
-            cursor: pointer;
-            background-color: #f8f9fa;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
-            transition: background-color 0.3s, color 0.3s;
-            border-left: 1px solid #ddd;
-        }
-
-        .tab-button:last-child {
-            border-left: none;
-        }
-
-        .tab-button.active {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-        
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        td,
-        th {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: right;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        input[type="text"]:focus,
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        textarea:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-            outline: none;
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        .file-upload-container {
-            border: 2px dashed #3498db;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .file-upload-container:hover {
-            background-color: #f0f8ff;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        #image-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-            justify-content: center;
-        }
-
-        .preview-image-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .delete-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: rgba(255, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            line-height: 20px;
-            text-align: center;
-        }
-
-        .button-container {
-            text-align: center;
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        #print-button {
-            background-color: #27ae60;
-            color: white;
-        }
-        
-        #print-button:hover {
-            background-color: #229954;
-        }
-
-        #clear-button {
-            background-color: #c0392b;
-            color: white;
-        }
-        
-        #clear-button:hover {
-            background-color: #a93226;
-        }
-
-        @media print {
-            body {
-                background-color: #fff;
-                padding: 0;
-            }
-            .container {
-                box-shadow: none;
-                border: none;
-                width: 100%;
-                max-width: 100%;
-                padding: 0;
-            }
-            .button-container, .file-upload-container, .tabs {
-                display: none;
-            }
-             h1 {
-                font-size: 20px;
-            }
-            td, th {
-                padding: 8px;
-                font-size: 12px;
-            }
-            #image-preview {
-                page-break-inside: avoid;
-            }
-        }
-    </style>
+    body {
+      font-family: var(--font-family );
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-    <div class="container" id="report-container">
-        <h1>برنامج النشاط الطلابي</h1>
-        <div class="tabs">
-            <button class="tab-button active" data-tab="tab1">مجال المواطنة و الحياة</button>
-            <button class="tab-button" data-tab="tab2">مجال الثقافة و الفنون</button>
-            <button class="tab-button" data-tab="tab3">مجال العلوم و التقنية</button>
-            <button class="tab-button" data-tab="tab4">مجال الريادة و الصحة</button>
-            <button class="tab-button" data-tab="tab5">مجال القيم و المناسبات</button>
-            <button class="tab-button" data-tab="tab6">مجال النشاط الكشفي</button>
-            <button class="tab-button" data-tab="tab7">التقرير الاسبوعي للأنشطة</button>
-            <button class="tab-button" data-tab="tab8">التقرير الختامي للأنشطة</button>
-        </div>
 
-        <div id="tab1" class="tab-content active">
-             <table>
-                <tr>
-                    <td>اسم المدرسة</td>
-                    <td><input type="text" id="school-name-1"></td>
-                    <td>إدارة التعليم</td>
-                    <td><input type="text" id="edu-admin-1"></td>
-                </tr>
-                <tr>
-                    <td>الصف</td>
-                    <td><input type="text" id="class-1"></td>
-                    <td>الحصة</td>
-                    <td><input type="text" id="period-1"></td>
-                </tr>
-                <tr>
-                    <td>اليوم</td>
-                    <td><input type="text" id="day-1"></td>
-                    <td>التاريخ</td>
-                    <td><input type="text" id="date-1" class="flatpickr-input"></td>
-                </tr>
-                <tr>
-                    <td>اسم البرنامج المنفذ</td>
-                    <td colspan="3"><input type="text" id="program-name-1"></td>
-                </tr>
-                <tr>
-                    <td>مكان التنفيذ</td>
-                    <td><input type="text" id="location-1"></td>
-                    <td>عدد الحضور</td>
-                    <td><input type="number" id="attendees-1"></td>
-                </tr>
-                <tr>
-                    <td colspan="4">أهداف البرنامج</td>
-                </tr>
-                <tr>
-                    <td colspan="4"><textarea id="program-goals-1"></textarea></td>
-                </tr>
-                <tr>
-                    <td colspan="4">الأثر الإيجابي للبرنامج</td>
-                </tr>
-                <tr>
-                    <td colspan="4"><textarea id="positive-impact-1"></textarea></td>
-                </tr>
-            </table>
-        </div>
+<div id="iframe-container" style="width: 100%; height: 100%; display: flex;">
+  <iframe id="content-frame" src="https://defullah2010-svg.github.io/A1396/" frameborder="0" style="width:100%; height:100%; border:0;"></iframe>
+</div>
 
-        <div id="tab2" class="tab-content"> <h2>مجال الثقافة و الفنون</h2> </div>
-        <div id="tab3" class="tab-content"> <h2>مجال العلوم و التقنية</h2> </div>
-        <div id="tab4" class="tab-content"> <h2>مجال الريادة و الصحة</h2> </div>
-        <div id="tab5" class="tab-content"> <h2>مجال القيم و المناسبات</h2> </div>
-        <div id="tab6" class="tab-content"> <h2>مجال النشاط الكشفي</h2> </div>
-        <div id="tab7" class="tab-content"> <h2>التقرير الاسبوعي للأنشطة</h2> </div>
-        <div id="tab8" class="tab-content"> <h2>التقرير الختامي للأنشطة</h2> </div>
-
-        <h2>الشواهد (الصور)</h2>
-        <div class="file-upload-container" onclick="document.getElementById('file-input').click()">
-            <p>انقر هنا لرفع الصور</p>
-            <input type="file" id="file-input" multiple accept="image/*">
-        </div>
-        <div id="image-preview"></div>
-
-        <table>
-            <tr>
-                <td>رائد النشاط</td>
-                <td><input type="text" id="activity-lead"></td>
-                <td>مدير المدرسة</td>
-                <td><input type="text" id="school-principal"></td>
-            </tr>
-        </table>
-
-        <div class="button-container">
-            <button id="print-button">طباعة التقرير</button>
-            <button id="clear-button">حذف البيانات</button>
-        </div>
-    </div>
-
-    <script>
-        // All necessary JavaScript is now included here
-        document.addEventListener('DOMContentLoaded', function () {
-            flatpickr("#date-1", {
-                locale: "ar",
-                dateFormat: "d-m-Y"
-            });
-
-            const tabs = document.querySelectorAll('.tab-button');
-            const contents = document.querySelectorAll('.tab-content');
-            let activeTabContent = document.querySelector('.tab-content.active');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(item => item.classList.remove('active'));
-                    contents.forEach(content => content.classList.remove('active'));
-                    tab.classList.add('active');
-                    const newActiveTab = document.getElementById(tab.dataset.tab);
-                    newActiveTab.classList.add('active');
-                    activeTabContent = newActiveTab;
-                });
-            });
-
-            const fileInput = document.getElementById('file-input');
-            const imagePreview = document.getElementById('image-preview');
-
-            fileInput.addEventListener('change', function () {
-                imagePreview.innerHTML = '';
-                for (const file of this.files) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const container = document.createElement('div');
-                        container.className = 'preview-image-container';
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'preview-image';
-                        container.appendChild(img);
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.innerHTML = '&times;';
-                        deleteBtn.className = 'delete-btn';
-                        deleteBtn.onclick = function() {
-                           container.remove();
-                        };
-                        container.appendChild(deleteBtn);
-                        imagePreview.appendChild(container);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            document.getElementById('print-button').addEventListener('click', function () {
-                const reportContainer = document.getElementById('report-container');
-                const originalTitle = document.title;
-                const programNameInput = activeTabContent.querySelector('input[id^="program-name"]');
-                if (programNameInput && programNameInput.value) {
-                    document.title = programNameInput.value;
-                }
-                html2pdf().from(reportContainer).set({
-                    margin: 10,
-                    filename: document.title + '.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                }).save().then(() => {
-                    document.title = originalTitle;
-                });
-            });
-            
-            document.getElementById('clear-button').addEventListener('click', function () {
-                if (confirm('هل أنت متأكد أنك تريد حذف جميع البيانات المدخلة؟')) {
-                    const inputs = document.querySelectorAll('input, textarea');
-                    inputs.forEach(input => {
-                        if (input.type !== 'file') {
-                            input.value = '';
-                        }
-                    });
-                    imagePreview.innerHTML = '';
-                    fileInput.value = '';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+</body></html>
